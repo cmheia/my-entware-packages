@@ -1,0 +1,22 @@
+diff --git a/auto/lib/libatomic/make b/auto/lib/libatomic/make
+index c90318e..c8323d4 100644
+--- a/auto/lib/libatomic/make
++++ b/auto/lib/libatomic/make
+@@ -6,11 +6,16 @@
+     cat << END                                            >> $NGX_MAKEFILE
+ 
+ $NGX_LIBATOMIC/src/libatomic_ops.a:	$NGX_LIBATOMIC/Makefile
+-	cd $NGX_LIBATOMIC && \$(MAKE)
++	cd $NGX_LIBATOMIC && \$(MAKE) \\
++	&& if [ ! -f src/libatomic_ops.a ]; then ln -s ./.libs/libatomic_ops.a src/libatomic_ops.a; fi \\
+ 
+ $NGX_LIBATOMIC/Makefile:	$NGX_MAKEFILE
+ 	cd $NGX_LIBATOMIC \\
+ 	&& if [ -f Makefile ]; then \$(MAKE) distclean; fi \\
++	&& sed -i '/^        doc\/Makefile\$$/d' configure.ac \\
++	&& sed -i '/^        tests\/Makefile\$$/d' configure.ac \\
++	&& sed -i 's/^SUBDIRS = src doc tests\$$/SUBDIRS = src/g' Makefile.am \\
++	&& autoreconf -i \\
+ 	&& ./configure
+ 
+ END

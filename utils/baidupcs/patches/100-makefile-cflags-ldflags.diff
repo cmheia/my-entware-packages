@@ -1,0 +1,33 @@
+From ac8d682e9fe97e639380b802a12292126457e28e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E3=80=8C=E6=9C=89=E4=BA=8B=E7=87=92=E7=B4=99=E3=80=8D?=
+ <cmheia@gmail.com>
+Date: Sun, 13 Dec 2015 19:08:24 +0800
+Subject: [PATCH] fix [1]: utils.c:1: note: someone does not honour COPTS
+ correctly fix [2]: LDFLAGS
+
+---
+ makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/makefile b/makefile
+index 7b44a32..31cf063 100644
+--- a/makefile
++++ b/makefile
+@@ -26,12 +26,13 @@ else
+ CCFLAGS:=-g -D_FILE_OFFSET_BITS=64 -DDEBUG -D_DEBUG
+ endif
+ 
++CCFLAGS+= $(CFLAGS)
+ PCS_CCFLAGS = -fPIC $(CCFLAGS)
+ 
+ all: bin/libpcs.a bin/pcs
+ 
+ bin/pcs : pre bin/libpcs.a $(SHELL_OBJS)
+-	$(CC) -o $@ $(SHELL_OBJS) $(CCFLAGS) $(CYGWIN_CCFLAGS) $(APPLE_CCFLAGS) -L./bin -lpcs -lm -lcurl -lssl -lcrypto -lpthread
++	$(CC) -o $@ $(SHELL_OBJS) $(CCFLAGS) $(CYGWIN_CCFLAGS) $(APPLE_CCFLAGS) -L./bin -lpcs $(LDFLAGS)
+ 
+ bin/shell_arg.o: arg.c arg.h
+ 	$(CC) -o $@ -c $(PCS_CCFLAGS) arg.c
+-- 
+2.6.3.windows.1
+

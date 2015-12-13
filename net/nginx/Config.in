@@ -1,0 +1,260 @@
+#
+# Copyright (C) 2010-2012 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+menu "Configuration"
+        depends on PACKAGE_nginx
+
+config NGINX_SSL
+	bool
+	prompt "Enable SSL module"
+	help
+		Enable HTTPS/SSL support.
+	default y
+
+config NGINX_DAV
+	bool
+	prompt "Enable WebDAV module"
+	help
+		Enable the HTTP and WebDAV methods PUT, DELETE, MKCOL, COPY and MOVE.
+	default n
+
+config NGINX_FLV
+	bool
+	prompt "Enable FLV module"
+	help
+		Provides the ability to seek within FLV (Flash) files using time-based offsets.
+	default n
+
+config NGINX_STUB_STATUS
+	bool
+	prompt "Enable stub status module"
+	help
+		Enable the stub status module which gives some status from the server.
+	default n
+
+config NGINX_HTTP_CHARSET
+	bool
+	prompt "Enable HTTP charset module"
+	default y
+
+config NGINX_HTTP_GZIP
+	bool
+	prompt "Enable HTTP gzip module"
+	default y
+
+config NGINX_HTTP_SSI
+	bool
+	prompt "Enable HTTP ssi module"
+	default y
+
+config NGINX_HTTP_USERID
+	bool
+	prompt "Enable HTTP userid module"
+	default y
+
+config NGINX_HTTP_ACCESS
+	bool
+	prompt "Enable HTTP access module"
+	default y
+
+config NGINX_HTTP_AUTH_BASIC
+	bool
+	prompt "Enable HTTP auth basic"
+	default y
+
+config NGINX_HTTP_AUTOINDEX
+	bool
+	prompt "Enable HTTP autoindex module"
+	default y
+
+config NGINX_HTTP_GEO
+	bool
+	prompt "Enable HTTP geo module"
+	default y
+
+config NGINX_HTTP_MAP
+	bool
+	prompt "Enable HTTP map module"
+	default y
+
+config NGINX_HTTP_SPLIT_CLIENTS
+	bool
+	prompt "Enable HTTP split clients"
+	default y
+
+config NGINX_HTTP_REFERER
+	bool
+	prompt "Enable HTTP referer module"
+	default y
+
+config NGINX_HTTP_REWRITE
+	bool
+	prompt "Enable HTTP rewrite module"
+	select NGINX_PCRE
+	default y
+
+config NGINX_HTTP_PROXY
+	bool
+	prompt "Enable HTTP proxy module"
+	default y
+
+config NGINX_HTTP_FASTCGI
+	bool
+	prompt "Enable HTTP fastcgi module"
+	default y
+
+config NGINX_HTTP_UWSGI
+	bool
+	prompt "Enable HTTP uwsgi module"
+	default y
+
+config NGINX_HTTP_SCGI
+	bool
+	prompt "Enable HTTP scgi module"
+	default y
+
+config NGINX_HTTP_MEMCACHED
+	bool
+	prompt "Enable HTTP memcached module"
+	default y
+
+config NGINX_HTTP_LIMIT_CONN
+	bool
+	prompt "Enable HTTP limit conn"
+	default y
+
+config NGINX_HTTP_LIMIT_REQ
+	bool
+	prompt "Enable HTTP limit req"
+	default y
+
+config NGINX_HTTP_EMPTY_GIF
+	bool
+	prompt "Enable HTTP empty gif"
+	default y
+
+config NGINX_HTTP_BROWSER
+	bool
+	prompt "Enable HTTP browser module"
+	default y
+
+config NGINX_HTTP_UPSTREAM_HASH
+	bool
+	prompt "Enable HTTP hash module"
+	default y
+
+config NGINX_HTTP_UPSTREAM_IP_HASH
+	bool
+	prompt "Enable HTTP IP hash module"
+	default y
+
+config NGINX_HTTP_UPSTREAM_LEAST_CONN
+	bool
+	prompt "Enable HTTP least conn module"
+	default y
+
+config NGINX_HTTP_UPSTREAM_KEEPALIVE
+	bool
+	prompt "Enable HTTP keepalive module"
+	default y
+
+config NGINX_HTTP_CACHE
+	bool
+	prompt "Enable HTTP cache"
+	default y
+
+config NGINX_PCRE
+	bool
+	prompt "Enable PCRE library usage"
+	default y
+
+config NGINX_HTTP_UPSTREAM_CHECK
+	bool
+	select NGINX_SSL
+	prompt "Enable HTTP upstream check module"
+	default y
+
+config NGINX_SUBSTITUTIONS_FILTER
+	bool
+	prompt "Enable substitutions filter module"
+	default y
+	help
+		nginx_substitutions_filter is a filter module which can do both regular
+		expression and fixed string substitutions on response bodies.
+
+		Example
+		location / {
+			subs_filter_types text/html text/css text/xml;
+			subs_filter st(\d*).example.com $1.example.com ir;
+			subs_filter a.example.com s.example.com;
+			subs_filter http://$host https://$host;
+		}
+		See https://github.com/yaoweibin/ngx_http_substitutions_filter_module
+		for specific instructions.
+
+config NGINX_HTTP_GUNZIP
+	bool
+	prompt "Enable http gunzip module"
+	default y
+	help
+		The ngx_http_gunzip_module module is a filter that decompresses
+		responses with "Content-Encoding: gzip" for clients that do not
+		support "gzip" encoding method. The module will be useful when
+		it is desirable to store data compressed to save space and
+		reduce I/O costs.
+
+config NGINX_GZIP_STATIC
+	bool
+	prompt "Enable http gzip static module"
+	default y
+	help
+		The ngx_http_gzip_static_module module allows sending precompressed
+		files with the ".gz" filename extension instead of regular files.
+
+config NGINX_HTTP_SECURE_LINK
+	bool
+	prompt "Enable http secure link module"
+	default y
+	help
+		The ngx_http_secure_link_module module (0.7.18) is used to check
+		authenticity of requested links, protect resources from
+		unauthorized access, and limit link lifetime.
+
+config NGINX_HTTP_V2
+	bool
+	prompt "Enable http v2 module"
+	default y
+	help
+		The ngx_http_v2_module module (1.9.5) provides support for HTTP/2
+		and supersedes the ngx_http_spdy_module module.
+
+config NGINX_USE_LIBRESSL
+	bool
+	prompt "Use libressl instead of openssl"
+	select NGINX_LIBATOMIC_OPS
+	default y
+	help
+		LibreSSL is a fork of OpenSSL 1.0.1g developed by the OpenBSD project.
+		LibreSSL is API compatible with OpenSSL 1.0.1, but does not yet include
+		all new APIs from OpenSSL 1.0.2 and later.LibreSSL also includes APIs
+		not yet present in OpenSSL. The current common API subset is OpenSSL 1.0.1.
+
+config NGINX_LIBATOMIC_OPS
+	bool
+	prompt "Use libatomic_ops"
+	default y
+	help
+		Enable libatomic_ops support.
+
+#config NGINX_LUA
+#	bool
+#	prompt "Enable LUA module"
+#	default n
+#	help
+#		Enable support for LUA scripts.
+
+endmenu
