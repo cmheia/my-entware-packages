@@ -17,7 +17,7 @@ index f7f686c..3224f86 100644
  		|| cp conf/nginx.conf '\$(DESTDIR)$NGX_CONF_PATH'
  	cp conf/nginx.conf '\$(DESTDIR)$NGX_CONF_PREFIX/nginx.conf.default'
 diff --git a/conf/nginx.conf b/conf/nginx.conf
-index 29bc085..d62ebe7 100644
+index 29bc085..fbba93f 100644
 --- a/conf/nginx.conf
 +++ b/conf/nginx.conf
 @@ -1,117 +1,156 @@
@@ -214,24 +214,24 @@ index 29bc085..d62ebe7 100644
 +	#	# proxy the PHP scripts to Apache listening on 127.0.0.1:80
 +	#	#
 +	#	#location ~ \.php$ {
-+	#	#    proxy_pass   http://127.0.0.1;
++	#	#	proxy_pass   http://127.0.0.1;
 +	#	#}
 +	#
 +	#	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
 +	#	#
 +	#	#location ~ \.php$ {
-+	#	#    root           html;
-+	#	#    fastcgi_pass   127.0.0.1:9000;
-+	#	#    fastcgi_index  index.php;
-+	#	#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
-+	#	#    include        fastcgi_params;
++	#	#	root           html;
++	#	#	fastcgi_pass   127.0.0.1:9000;
++	#	#	fastcgi_index  index.php;
++	#	#	fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
++	#	#	include        fastcgi_params;
 +	#	#}
 +	#
 +	#	# deny access to .htaccess files, if Apache's document root
 +	#	# concurs with nginx's one
 +	#	#
 +	#	#location ~ /\.ht {
-+	#	#    deny  all;
++	#	#	deny  all;
 +	#	#}
 +	#}
 +
@@ -284,7 +284,7 @@ index 29bc085..d62ebe7 100644
  }
 diff --git a/conf/vhost/blog.conf b/conf/vhost/blog.conf
 new file mode 100644
-index 0000000..2f35537
+index 0000000..32b181c
 --- /dev/null
 +++ b/conf/vhost/blog.conf
 @@ -0,0 +1,34 @@

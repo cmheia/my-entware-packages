@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=7.0.0
+PKG_VERSION:=7.0.3
 PKG_RELEASE:=1
 
 PKG_MAINTAINER:=cmheia <router@cmheia.com>
@@ -19,7 +19,7 @@ PKG_LICENSE_FILES:=LICENSE
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://php.net/distributions/
-PKG_MD5SUM:=394e4d6c517078ca3e23acf633c5ed27
+PKG_MD5SUM:=3c5d2b5b392b78fa92c48822e25ccb56
 
 PKG_FIXUP:=libtool autoreconf
 PKG_BUILD_PARALLEL:=1
@@ -39,7 +39,8 @@ PHP7_MODULES = \
 	imap \
 	mbstring mcrypt mysqli mysqlnd \
 	opcache openssl \
-	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql readline \
+	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql phar \
+	readline \
 	session shmop simplexml soap sockets sqlite3 sysvmsg sysvsem sysvshm \
 	tokenizer \
 	xml xmlreader xmlwriter zip \
@@ -163,8 +164,7 @@ CONFIGURE_ARGS+= \
 	\
 	--with-zlib="$(STAGING_DIR)/opt" \
 	--with-zlib-dir="$(STAGING_DIR)/opt" \
-	--with-pcre-regex="$(STAGING_DIR)/opt" \
-	--disable-phar
+	--with-pcre-regex="$(STAGING_DIR)/opt"
 
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_php7-mod-bcmath),)
@@ -438,6 +438,12 @@ else
   CONFIGURE_ARGS+= --disable-xmlwriter
 endif
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_php7-mod-phar),)
+  CONFIGURE_ARGS+= --enable-phar=shared,"$(STAGING_DIR)/opt"
+else
+  CONFIGURE_ARGS+= --disable-phar
+endif
+
 # WARN: if error: utf8_mime2text() has new signature, but U8T_CANONICAL is missing
 # FIXIT: sudo apt-get install libc-client2007e-dev
 ifneq ($(SDK)$(CONFIG_PACKAGE_php7-mod-imap),)
@@ -614,6 +620,7 @@ $(eval $(call BuildModule,gettext,Gettext,+PACKAGE_php7-mod-gettext:libintl-full
 $(eval $(call BuildModule,gmp,GMP,+PACKAGE_php7-mod-gmp:libgmp))
 $(eval $(call BuildModule,hash,Hash))
 $(eval $(call BuildModule,iconv,iConv,$(ICONV_DEPENDS)))
+$(eval $(call BuildModule,imap,IMAP,+PACKAGE_php7-mod-imap:libc-client +PACKAGE_php7-mod-imap:libext2fs +PACKAGE_php7-mod-imap:libopenssl))
 $(eval $(call BuildModule,json,JSON))
 $(eval $(call BuildModule,ldap,LDAP,+PACKAGE_php7-mod-ldap:libopenldap +PACKAGE_php7-mod-ldap:libsasl2))
 $(eval $(call BuildModule,mbstring,MBString))
@@ -622,13 +629,13 @@ $(eval $(call BuildModule,mysqlnd,a replacement for libmysqlclient))
 $(eval $(call BuildModule,mysqli,MySQL Improved Extension,+PACKAGE_php7-mod-mysqlnd:libmysqlclient))
 $(eval $(call BuildModule,opcache,OPcache,,zend))
 $(eval $(call BuildModule,openssl,OpenSSL,+PACKAGE_php7-mod-openssl:libopenssl +PACKAGE_php7-mod-openssl:krb5-libs +PACKAGE_php7-mod-openssl:libext2fs))
-$(eval $(call BuildModule,imap,IMAP,+PACKAGE_php7-mod-imap:libc-client +PACKAGE_php7-mod-imap:libext2fs +PACKAGE_php7-mod-imap:libopenssl))
 $(eval $(call BuildModule,pcntl,PCNTL))
 $(eval $(call BuildModule,pdo,PHP Data Objects))
 $(eval $(call BuildModule,pdo-mysql,PDO driver for MySQL,+php7-mod-pdo +PACKAGE_php7-mod-pdo-mysql:libmysqlclient))
 $(eval $(call BuildModule,pdo-pgsql,PDO driver for PostgreSQL,+php7-mod-pdo +PACKAGE_php7-mod-pdo-pgsql:libpq))
 $(eval $(call BuildModule,pdo-sqlite,PDO driver for SQLite 3.x,+php7-mod-pdo +PACKAGE_php7-mod-pdo-sqlite:libsqlite3 +PACKAGE_php7-mod-pdo-sqlite:librt))
 $(eval $(call BuildModule,pgsql,PostgreSQL,+PACKAGE_php7-mod-pgsql:libpq))
+$(eval $(call BuildModule,phar,PHP Archive,+PACKAGE_php7-mod-phar:libopenssl +PACKAGE_php7-mod-phar:zlib +PACKAGE_php7-mod-phar:libbz2))
 $(eval $(call BuildModule,readline,readline,+PACKAGE_php7-mod-readline:libreadline))
 $(eval $(call BuildModule,session,Session))
 $(eval $(call BuildModule,shmop,Shared Memory))

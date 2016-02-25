@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PECL_NAME:=mysql
 PECL_LONGNAME:=MySQL database access functions
 
-PKG_VERSION:=1.0.0-dev-7.0.0
+PKG_VERSION:=1.0.0-dev
 PKG_RELEASE:=1
 
 PKG_NAME:=php7-pecl-$(PECL_NAME)

@@ -1,0 +1,15 @@
+diff --git a/configure.in b/configure.in
+index b7f1c96..35c42ca 100644
+--- a/configure.in
++++ b/configure.in
+@@ -1446,8 +1446,8 @@ INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
+ CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
+ 
+ if test "$PHP_PHAR" != "no" && test "$PHP_CLI" != "no"; then
+-  pharcmd=pharcmd
+-  pharcmd_install=install-pharcmd
++  pharcmd=
++  pharcmd_install=
+ else
+   pharcmd=
+   pharcmd_install=
