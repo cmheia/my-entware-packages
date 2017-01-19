@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2012-2015 OpenWrt.org
-# Copyright (C) 2015 「有事燒紙」 <router@cmheia.com>
+# Copyright (C) 2017 然而并没有 <router@cmheia.com>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
-PKG_VERSION:=1.9.12
+PKG_VERSION:=1.11.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://nginx.org/download/
-PKG_MD5SUM:=0afe4a7e589a0de43b7b54aa055a4351
+PKG_MD5SUM:=8f68f49b6db510e567bba9e0c271a3ac
 PKG_MAINTAINER:=cmheia <router@cmheia.com>
 PKG_LICENSE:=2-clause BSD-like license
 
@@ -26,8 +26,8 @@ PKG_INSTALL:=1
 LUA_MODULE_VERSION:=0.9.19
 LUA_MODULE_MD5SUM:=987b6dd138f831d4b524c5e7c28a4f84
 
-LIBRESSL_VERSION:=2.3.2
-LIBRESSL_MD5SUM:=35d5bf0fc1bc88d67cfdfa0f00434268
+LIBRESSL_VERSION:=2.5.0
+LIBRESSL_MD5SUM:=99ce3203d1031b2503080104845b1bf0
 
 PKG_CONFIG_DEPENDS := \
 	CONFIG_NGINX_SSL \
@@ -82,10 +82,15 @@ define Package/nginx/Default
   DEPENDS:=+NGINX_PCRE:libpcre +NGINX_HTTP_GZIP:zlib +libssp
   DEPENDS+=$(3)
 
+#ifeq ($(CONFIG_NGINX_LUA),y)
+#  DEPENDS += +NGINX_LUA:liblua
+#endif
+
 ifneq ($(CONFIG_NGINX_USE_LIBRESSL),y)
   DEPENDS += +(NGINX_SSL||NGINX_HTTP_CACHE||NGINX_HTTP_AUTH_BASIC):libopenssl
 endif
 
+#  MENU:=1
 endef
 
 Package/nginx=$(call Package/nginx/Default,default,,+libpthread)
@@ -258,8 +263,8 @@ define Build/Configure
 			--conf-path=/opt/etc/nginx/nginx.conf \
 			$(ADDITIONAL_MODULES) \
 			--error-log-path=/opt/var/log/nginx/error.log \
-			--pid-path=/opt/var/run/nginx.pid \
-			--lock-path=/opt/var/lock/nginx.lock \
+			--pid-path=/var/run/nginx.pid \
+			--lock-path=/var/lock/nginx.lock \
 			--http-log-path=/opt/var/log/nginx/access.log \
 			--http-client-body-temp-path=/opt/var/lib/nginx/body \
 			--http-proxy-temp-path=/opt/var/lib/nginx/proxy \
@@ -282,7 +287,6 @@ define Package/nginx/install
 	$(INSTALL_BIN) ./files/S80nginx $(1)/opt/etc/init.d
 	$(INSTALL_DIR) $(1)/opt/share/nginx/html
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/opt/html/{index,50x}.html $(1)/opt/share/nginx/html
-	$(INSTALL_DIR) $(1)/opt/var/{run,lock}
 	$(INSTALL_DIR) $(1)/opt/var/log/nginx
 	$(INSTALL_DIR) $(1)/opt/var/lib/nginx/{body,fastcgi}
 	$(INSTALL_DIR) $(1)/opt/var/proxy/nginx/{temp,cache}
@@ -301,7 +305,7 @@ define Build/Prepare
 endef
 
 define Download/libatomic_ops
-	VERSION:=2d98bd8d5fc56cf0c7e41838d42c1cc0786c2bd3
+	VERSION:=45896dc8681951f6ef3e0fcb7dd38e7e2a435411
 	SUBDIR:=libatomic_ops
 	FILE:=libatomic_ops-$(PKG_VERSION)-$$(VERSION).tar.gz
 	URL:=https://github.com/ivmai/libatomic_ops.git
@@ -331,7 +335,7 @@ define Prepare/lua-nginx
 endef
 
 define Download/nginx-upstream-check
-	VERSION:=10782eaff51872a8f44e65eed89bbe286004bcb1
+	VERSION:=d6341aeeb86911d4798fbceab35015c63178e66f
 	SUBDIR:=nginx-upstream-check
 	FILE:=nginx-upstream-check-$(PKG_VERSION)-$$(VERSION).tar.gz
 	URL:=https://github.com/yaoweibin/nginx_upstream_check_module.git
@@ -341,11 +345,16 @@ endef
 define Prepare/nginx-upstream-check
 	$(eval $(call Download,nginx-upstream-check))
 	gzip -dc $(DL_DIR)/$(FILE) | tar -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
-	$(call PatchDir,$(PKG_BUILD_DIR),./patches-nginx-upstream-check)
+	# DEBUG: Prepare nginx-upstream-check
+	# DEBUG: dir contents:
+	ls -lh
+	# DEBUG: PKG_BUILD_DIR $(PKG_BUILD_DIR)
+	cat $(PKG_BUILD_DIR)/nginx-upstream-check/check_1.11.5+.patch | patch -f -p0 -d $(PKG_BUILD_DIR)
+	# DEBUG: ---end---
 endef
 
 define Download/nginx-substitutions-filter
-	VERSION:=131c030cbb284c7eb22a1c5184236d0983391441
+	VERSION:=bc58cb11844bc42735bbaef7085ea86ace46d05b
 	SUBDIR:=nginx-substitutions-filter
 	FILE:=nginx-substitutions-filter-$(PKG_VERSION)-$$(VERSION).tar.gz
 	URL:=https://github.com/yaoweibin/ngx_http_substitutions_filter_module.git
@@ -373,6 +382,13 @@ define Prepare/libressl
 	# DEBUG: REAL_GNU_TARGET_NAME $(REAL_GNU_TARGET_NAME)
 	sed -i 's/^ARGS=""/ARGS="--host=$(REAL_GNU_TARGET_NAME) "/' $(PKG_BUILD_DIR)/libressl/config
 	$(call PatchDir,$(PKG_BUILD_DIR),./patches-libressl)
+	# DEBUG: ---begin---
+	# DEBUG: current working dir:
+	pwd
+	# DEBUG: dir contents:
+	ls -lh
+	# DEBUG: PKG_BUILD_DIR $(PKG_BUILD_DIR)
+	# DEBUG: ---end---
 endef
 
 $(eval $(call BuildPackage,nginx))

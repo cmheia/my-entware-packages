@@ -1,0 +1,13 @@
+diff --git a/src/event/ngx_event_openssl.h b/src/event/ngx_event_openssl.h
+index fc9ec05..5f65231 100644
+--- a/src/event/ngx_event_openssl.h
++++ b/src/event/ngx_event_openssl.h
+@@ -38,6 +38,8 @@
+ #define OPENSSL_VERSION_NUMBER  0x1000107fL
+ #endif
+ 
++#undef OPENSSL_VERSION_NUMBER
++#define OPENSSL_VERSION_NUMBER  0x1000107fL
+ 
+ #if (OPENSSL_VERSION_NUMBER >= 0x10100001L)
+ 

@@ -1,3 +1,27 @@
+diff --git a/auto/cc/conf b/auto/cc/conf
+index f2c25ed..7e90dba 100644
+--- a/auto/cc/conf
++++ b/auto/cc/conf
+@@ -200,7 +200,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
+     else
+         ngx_feature="C99 variadic macros"
+         ngx_feature_name="NGX_HAVE_C99_VARIADIC_MACROS"
+-        ngx_feature_run=yes
++        ngx_feature_run=no
+         ngx_feature_incs="#include <stdio.h>
+ #define var(dummy, ...)  sprintf(__VA_ARGS__)"
+         ngx_feature_path=
+@@ -214,7 +214,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
+ 
+     ngx_feature="gcc variadic macros"
+     ngx_feature_name="NGX_HAVE_GCC_VARIADIC_MACROS"
+-    ngx_feature_run=yes
++    ngx_feature_run=no
+     ngx_feature_incs="#include <stdio.h>
+ #define var(dummy, args...)  sprintf(args)"
+     ngx_feature_path=
+diff --git a/auto/cc/name b/auto/cc/name
+index 35d319e..e317312 100644
 --- a/auto/cc/name
 +++ b/auto/cc/name
 @@ -7,7 +7,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
@@ -9,26 +33,8 @@
      ngx_feature_incs=
      ngx_feature_path=
      ngx_feature_libs=
---- a/auto/cc/conf
-+++ b/auto/cc/conf
-@@ -178,7 +178,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
-     else
-         ngx_feature="C99 variadic macros"
-         ngx_feature_name="NGX_HAVE_C99_VARIADIC_MACROS"
--        ngx_feature_run=yes
-+        ngx_feature_run=no
-         ngx_feature_incs="#include <stdio.h>
- #define var(dummy, ...)  sprintf(__VA_ARGS__)"
-         ngx_feature_path=
-@@ -192,7 +192,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
- 
-     ngx_feature="gcc variadic macros"
-     ngx_feature_name="NGX_HAVE_GCC_VARIADIC_MACROS"
--    ngx_feature_run=yes
-+    ngx_feature_run=no
-     ngx_feature_incs="#include <stdio.h>
- #define var(dummy, args...)  sprintf(args)"
-     ngx_feature_path=
+diff --git a/auto/os/linux b/auto/os/linux
+index c932267..67fdddc 100644
 --- a/auto/os/linux
 +++ b/auto/os/linux
 @@ -36,7 +36,7 @@ fi
@@ -40,7 +46,7 @@
  ngx_feature_incs="#include <sys/epoll.h>"
  ngx_feature_path=
  ngx_feature_libs=
-@@ -93,7 +93,7 @@ ngx_feature_test="int fd; struct stat sb
+@@ -93,7 +93,7 @@ ngx_feature_test="int fd; struct stat sb;
  CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE"
  ngx_feature="sendfile()"
  ngx_feature_name="NGX_HAVE_SENDFILE"
@@ -58,7 +64,7 @@
  ngx_feature_incs="#include <sys/sendfile.h>
                    #include <errno.h>"
  ngx_feature_path=
-@@ -132,7 +132,7 @@ ngx_include="sys/prctl.h"; . auto/includ
+@@ -132,7 +132,7 @@ ngx_include="sys/prctl.h"; . auto/include
  
  ngx_feature="prctl(PR_SET_DUMPABLE)"
  ngx_feature_name="NGX_HAVE_PR_SET_DUMPABLE"
@@ -67,9 +73,11 @@
  ngx_feature_incs="#include <sys/prctl.h>"
  ngx_feature_path=
  ngx_feature_libs=
+diff --git a/auto/unix b/auto/unix
+index 8c0e813..da09e7e 100644
 --- a/auto/unix
 +++ b/auto/unix
-@@ -678,7 +678,7 @@ ngx_feature_test="void *p; p = memalign(
+@@ -735,7 +735,7 @@ ngx_feature_test="void *p; p = memalign(4096, 4096);
  
  ngx_feature="mmap(MAP_ANON|MAP_SHARED)"
  ngx_feature_name="NGX_HAVE_MAP_ANON"
@@ -78,7 +86,7 @@
  ngx_feature_incs="#include <sys/mman.h>"
  ngx_feature_path=
  ngx_feature_libs=
-@@ -691,7 +691,7 @@ ngx_feature_test="void *p;
+@@ -748,7 +748,7 @@ ngx_feature_test="void *p;
  
  ngx_feature='mmap("/dev/zero", MAP_SHARED)'
  ngx_feature_name="NGX_HAVE_MAP_DEVZERO"
@@ -87,7 +95,7 @@
  ngx_feature_incs="#include <sys/mman.h>
                    #include <sys/stat.h>
                    #include <fcntl.h>"
-@@ -706,7 +706,7 @@ ngx_feature_test='void *p; int  fd;
+@@ -763,7 +763,7 @@ ngx_feature_test='void *p; int  fd;
  
  ngx_feature="System V shared memory"
  ngx_feature_name="NGX_HAVE_SYSVSHM"
@@ -96,7 +104,7 @@
  ngx_feature_incs="#include <sys/ipc.h>
                    #include <sys/shm.h>"
  ngx_feature_path=
-@@ -720,7 +720,7 @@ ngx_feature_test="int  id;
+@@ -777,7 +777,7 @@ ngx_feature_test="int  id;
  
  ngx_feature="POSIX semaphores"
  ngx_feature_name="NGX_HAVE_POSIX_SEM"

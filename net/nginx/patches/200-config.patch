@@ -1,19 +1,19 @@
 diff --git a/auto/install b/auto/install
-index f7f686c..3224f86 100644
+index d884487..7009f5d 100644
 --- a/auto/install
 +++ b/auto/install
-@@ -133,6 +133,13 @@ install:	$NGX_OBJS${ngx_dirsep}nginx${ngx_binext} \
- 	cp conf/scgi_params \
+@@ -144,6 +144,13 @@ install:	build $NGX_INSTALL_PERL_MODULES
+ 	cp conf/scgi_params \\
  		'\$(DESTDIR)$NGX_CONF_PREFIX/scgi_params.default'
  
-+	test -d '\$(DESTDIR)$NGX_CONF_PREFIX/vhost' \
++	test -d '\$(DESTDIR)$NGX_CONF_PREFIX/vhost' \\
 +		|| mkdir -p '\$(DESTDIR)$NGX_CONF_PREFIX/vhost'
 +
-+	test -f '\$(DESTDIR)$NGX_CONF_PREFIX/vhost/blog.conf' \
++	test -f '\$(DESTDIR)$NGX_CONF_PREFIX/vhost/blog.conf' \\
 +		|| cp conf/vhost/blog.conf '\$(DESTDIR)$NGX_CONF_PREFIX/vhost/'
 +	cp conf/vhost/blog.conf '\$(DESTDIR)$NGX_CONF_PREFIX/vhost/blog.conf.default'
 +
- 	test -f '\$(DESTDIR)$NGX_CONF_PATH' \
+ 	test -f '\$(DESTDIR)$NGX_CONF_PATH' \\
  		|| cp conf/nginx.conf '\$(DESTDIR)$NGX_CONF_PATH'
  	cp conf/nginx.conf '\$(DESTDIR)$NGX_CONF_PREFIX/nginx.conf.default'
 diff --git a/conf/nginx.conf b/conf/nginx.conf
