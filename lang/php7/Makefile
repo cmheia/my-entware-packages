@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=7.0.3
+PKG_VERSION:=7.1.1
 PKG_RELEASE:=1
 
 PKG_MAINTAINER:=cmheia <router@cmheia.com>
@@ -19,7 +19,7 @@ PKG_LICENSE_FILES:=LICENSE
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://php.net/distributions/
-PKG_MD5SUM:=3c5d2b5b392b78fa92c48822e25ccb56
+PKG_MD5SUM:=65eef256f6e7104a05361939f5e23ada
 
 PKG_FIXUP:=libtool autoreconf
 PKG_BUILD_PARALLEL:=1
@@ -482,8 +482,8 @@ define Package/php7/conffiles
 endef
 
 define Package/php7-fpm/conffiles
-/opt/etc/php-fpm.conf
-/opt/etc/php-fpm.d/www.conf
+/opt/etc/php7-fpm.conf
+/opt/etc/php7-fpm.d/www.conf
 endef
 
 define Package/php7/install
@@ -520,31 +520,33 @@ endef
 
 define Package/php7-fpm/install
 	$(INSTALL_DIR) $(1)/opt/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sapi/fpm/php-fpm $(1)/opt/sbin/php-fpm
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sapi/fpm/php-fpm $(1)/opt/sbin/php7-fpm
 
 	$(INSTALL_DIR) $(1)/opt/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/sapi/fpm/php-fpm.conf $(1)/opt/etc/
-	sed -i 's@^;error_log.*@error_log=/opt/var/log/php-fpm.log@' $(1)/opt/etc/php-fpm.conf
-	sed -i 's@^;emergency_restart_threshold.*@emergency_restart_threshold=30@' $(1)/opt/etc/php-fpm.conf
-	sed -i 's@^;emergency_restart_interval.*@emergency_restart_interval=60s@' $(1)/opt/etc/php-fpm.conf
-	sed -i 's@^;process_control_timeout.*@process_control_timeout=10s@' $(1)/opt/etc/php-fpm.conf
-	sed -i 's@^; process.max.*@process.max=16@' $(1)/opt/etc/php-fpm.conf
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/sapi/fpm/php-fpm.conf $(1)/opt/etc/php7-fpm.conf
+	sed -i 's@^;error_log.*@error_log=/opt/var/log/php7-fpm.log@' $(1)/opt/etc/php7-fpm.conf
+	sed -i 's@^;emergency_restart_threshold.*@emergency_restart_threshold=30@' $(1)/opt/etc/php7-fpm.conf
+	sed -i 's@^;emergency_restart_interval.*@emergency_restart_interval=60s@' $(1)/opt/etc/php7-fpm.conf
+	sed -i 's@^;process_control_timeout.*@process_control_timeout=10s@' $(1)/opt/etc/php7-fpm.conf
+	sed -i 's@^; process.max.*@process.max=16@' $(1)/opt/etc/php7-fpm.conf
+	sed -i 's@php-fpm@php7-fpm@' $(1)/opt/etc/php7-fpm.conf
 
 	$(INSTALL_DIR) $(1)/opt/etc/init.d
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sapi/fpm/init.d.php-fpm $(1)/opt/etc/init.d/S86php-fpm
-	sed -i 's@^php_fpm_PID.*@php_fpm_PID=/var/run/php-fpm.pid@' $(1)/opt/etc/init.d/S86php-fpm
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sapi/fpm/init.d.php-fpm $(1)/opt/etc/init.d/S86php7-fpm
+	sed -i 's@php-fpm@php7-fpm@' $(1)/opt/etc/init.d/S86php7-fpm
 
-	$(INSTALL_DIR) $(1)/opt/etc/php-fpm.d
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/sapi/fpm/www.conf $(1)/opt/etc/php-fpm.d/
-	sed -i 's@^listen.*@listen=/dev/shm/php-fpm.sock@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^;listen.mode.*@listen.mode=0666@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^;listen.allowed_clients.*@listen.allowed_clients=127.0.0.1@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^pm.max_children.*@pm.max_children=3@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^;pm.max_requests.*@pm.max_requests=2048@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^;request_terminate_timeout.*@request_terminate_timeout=120s@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^;env\[TMP\].*@env\[TMP\]=/tmp@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^;env\[TMPDIR\].*@env\[TMPDIR\]=/tmp@' $(1)/opt/etc/php-fpm.d/www.conf
-	sed -i 's@^;env\[TEMP\].*@env\[TEMP\]=/tmp@' $(1)/opt/etc/php-fpm.d/www.conf
+	$(INSTALL_DIR) $(1)/opt/etc/php7-fpm.d
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/sapi/fpm/www.conf $(1)/opt/etc/php7-fpm.d/
+	sed -i 's@^listen.*@listen=/dev/shm/php7-fpm.sock@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^;listen.mode.*@listen.mode=0666@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^;listen.allowed_clients.*@listen.allowed_clients=127.0.0.1@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^pm.max_children.*@pm.max_children=3@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^;pm.max_requests.*@pm.max_requests=2048@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^;request_terminate_timeout.*@request_terminate_timeout=120s@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^;env\[TMP\].*@env\[TMP\]=/tmp@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^;env\[TMPDIR\].*@env\[TMPDIR\]=/tmp@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@^;env\[TEMP\].*@env\[TEMP\]=/tmp@' $(1)/opt/etc/php7-fpm.d/www.conf
+	sed -i 's@php-fpm@php7-fpm@' $(1)/opt/etc/php7-fpm.d/www.conf
 
 	$(INSTALL_DIR) $(1)/opt/share/www/www
 	echo "<?php phpinfo(); ?>" > $(1)/opt/share/www/www/phpinfo.php

@@ -11,13 +11,13 @@ include $(TOPDIR)/rules.mk
 PECL_NAME:=xdebug
 PECL_LONGNAME:=Provides functions for function traces and profiling
 
-PKG_VERSION:=2.4.0RC4
+PKG_VERSION:=2.5.0
 PKG_RELEASE:=1
 
 PKG_NAME:=php7-pecl-$(PECL_NAME)
 PKG_SOURCE:=$(PECL_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://pecl.php.net/get/
-PKG_MD5SUM:=0ff361aa7bc8098ff7dd4c2ea13e7773
+PKG_MD5SUM:=5306da5948e195c2e4585c9abd7741f9
 
 PKG_MAINTAINER:=cmheia <router@cmheia.com>
 
